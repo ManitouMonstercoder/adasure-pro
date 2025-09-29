@@ -1,0 +1,60 @@
+name: Deploy AdaSure Pro
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  deploy-frontend:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Build production bundle
+      run: npm run build:prod
+
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      if: github.ref == 'refs/heads/main'
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./dist
+        publish_branch: gh-pages
+
+  deploy-worker:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+
+    - name: Install Wrangler
+      run: npm install -g wrangler
+
+    - name: Deploy Cloudflare Worker
+      run: wrangler deploy
+      env:
+        CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+
+    - name: Set Cloudflare Secrets
+      run: |
+        echo "${{ secrets.STRIPE_SECRET_KEY }}" | wrangler secret put STRIPE_SECRET_KEY
+        echo "${{ secrets.JWT_SECRET }}" | wrangler secret put JWT_SECRET
+        echo "${{ secrets.SENDPULSE_API_SECRET }}" | wrangler secret put SENDPULSE_API_SECRET
+      env:
+        CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}

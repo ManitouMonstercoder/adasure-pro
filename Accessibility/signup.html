@@ -519,20 +519,8 @@
             document.getElementById('error-message').style.display = 'none';
         }
 
-        // Analytics tracking
-        gtag('event', 'page_view', {
-            page_title: 'Signup Page',
-            page_location: window.location.href
-        });
-    </script>
-
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=GA-MEASUREMENT-ID"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'GA-MEASUREMENT-ID');
+        // Simple analytics tracking (optional)
+        console.log('AdaSure Pro: Signup page loaded');
     </script>
 </body>
 </html>

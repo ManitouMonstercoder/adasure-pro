@@ -540,26 +540,8 @@
             });
         });
 
-        // Analytics tracking
-        gtag('event', 'page_view', {
-            page_title: 'Dashboard',
-            page_location: window.location.href
-        });
-
-        // Track user engagement
-        gtag('event', 'dashboard_load', {
-            user_type: 'authenticated',
-            plan: 'enterprise'
-        });
-    </script>
-
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=GA-MEASUREMENT-ID"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'GA-MEASUREMENT-ID');
+        // Simple analytics tracking (optional)
+        console.log('AdaSure Pro: Dashboard loaded for authenticated user');
     </script>
 </body>
 </html>

@@ -1,6 +1,7 @@
 /**
  * AdaSure Pro - Cloudflare Authentication & User Management
  * Handles user registration, authentication, and session management via Cloudflare Workers
+ * Uses Cloudflare free tier: KV Storage, D1 Database, and Workers
  */
 
 export interface UserAccount {
@@ -36,12 +37,16 @@ export interface SignupData {
 
 class CloudflareAuth {
     private workerUrl: string;
-    private zoneId: string;
+    private accountId: string;
+    private kvNamespaceId: string;
+    private d1DatabaseId: string;
     private sessionToken: string | null = null;
 
     constructor() {
         this.workerUrl = this.getEnvVar('CLOUDFLARE_WORKERS_URL');
-        this.zoneId = this.getEnvVar('CLOUDFLARE_ZONE_ID');
+        this.accountId = this.getEnvVar('CLOUDFLARE_ACCOUNT_ID');
+        this.kvNamespaceId = this.getEnvVar('CLOUDFLARE_KV_NAMESPACE_ID');
+        this.d1DatabaseId = this.getEnvVar('CLOUDFLARE_D1_DATABASE_ID');
         this.loadSession();
     }
 
@@ -52,8 +57,10 @@ class CloudflareAuth {
 
     private getDefaultConfig(): Record<string, string> {
         return {
-            CLOUDFLARE_WORKERS_URL: 'https://adasure-auth.example.workers.dev',
-            CLOUDFLARE_ZONE_ID: 'placeholder_zone_id'
+            CLOUDFLARE_WORKERS_URL: 'https://adasure-api.workers.dev',
+            CLOUDFLARE_ACCOUNT_ID: 'your_account_id_here',
+            CLOUDFLARE_KV_NAMESPACE_ID: 'your_kv_namespace_id',
+            CLOUDFLARE_D1_DATABASE_ID: 'your_d1_database_id'
         };
     }
 

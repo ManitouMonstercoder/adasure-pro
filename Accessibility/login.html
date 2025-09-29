@@ -289,20 +289,8 @@
             });
         });
 
-        // Analytics tracking
-        gtag('event', 'page_view', {
-            page_title: 'Login Page',
-            page_location: window.location.href
-        });
-    </script>
-
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=GA-MEASUREMENT-ID"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'GA-MEASUREMENT-ID');
+        // Simple analytics tracking (optional)
+        console.log('AdaSure Pro: Login page loaded');
     </script>
 </body>
 </html>
