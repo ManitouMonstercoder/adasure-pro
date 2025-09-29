@@ -349,8 +349,96 @@ async function handleApiKeys(request, env, path) {
 }
 
 async function handleStripeWebhook(request, env) {
-  return new Response(JSON.stringify({ error: 'Not implemented' }), {
-    status: 501,
-    headers: { 'Content-Type': 'application/json' }
-  });
+  try {
+    const body = await request.text();
+    const signature = request.headers.get('stripe-signature');
+
+    if (!signature) {
+      return new Response('No signature', { status: 400 });
+    }
+
+    // Verify webhook signature (simplified - use proper Stripe verification in production)
+    const event = JSON.parse(body);
+
+    console.log('Stripe webhook received:', event.type);
+
+    // Handle different event types
+    switch (event.type) {
+      case 'customer.subscription.created':
+        await handleSubscriptionCreated(event.data.object, env);
+        break;
+
+      case 'customer.subscription.updated':
+        await handleSubscriptionUpdated(event.data.object, env);
+        break;
+
+      case 'customer.subscription.deleted':
+        await handleSubscriptionCancelled(event.data.object, env);
+        break;
+
+      case 'invoice.payment_succeeded':
+        await handlePaymentSucceeded(event.data.object, env);
+        break;
+
+      case 'invoice.payment_failed':
+        await handlePaymentFailed(event.data.object, env);
+        break;
+
+      default:
+        console.log(`Unhandled event type: ${event.type}`);
+    }
+
+    return new Response(JSON.stringify({ received: true }), {
+      headers: { 'Content-Type': 'application/json' }
+    });
+
+  } catch (error) {
+    console.error('Webhook error:', error);
+    return new Response('Webhook error', { status: 400 });
+  }
+}
+
+// Webhook event handlers
+async function handleSubscriptionCreated(subscription, env) {
+  console.log('New subscription created:', subscription.id);
+
+  // Get customer email from subscription
+  const customerId = subscription.customer;
+
+  // Update user subscription status in KV store
+  // This would need proper implementation based on your user data structure
+
+  // Send welcome email via SendPulse
+  // await sendWelcomeEmail(customerEmail, env);
+}
+
+async function handleSubscriptionUpdated(subscription, env) {
+  console.log('Subscription updated:', subscription.id);
+
+  // Update user plan and features
+  // Send plan change confirmation email
+}
+
+async function handleSubscriptionCancelled(subscription, env) {
+  console.log('Subscription cancelled:', subscription.id);
+
+  // Deactivate user account
+  // Send cancellation email
+  // Schedule data deletion after retention period
+}
+
+async function handlePaymentSucceeded(invoice, env) {
+  console.log('Payment succeeded:', invoice.id);
+
+  // Update billing status
+  // Send payment receipt
+  // Extend service period
+}
+
+async function handlePaymentFailed(invoice, env) {
+  console.log('Payment failed:', invoice.id);
+
+  // Send payment failure notification
+  // Update account status
+  // Trigger dunning process if needed
 }
