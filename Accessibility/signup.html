@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - AdaSure Pro</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .hero-section {
+            color: white;
+        }
+
+        .hero-section h1 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .hero-section p {
+            font-size: 20px;
+            margin-bottom: 30px;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        .benefits-list {
+            list-style: none;
+            margin-bottom: 40px;
+        }
+
+        .benefits-list li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        .benefits-list li::before {
+            content: "✅";
+            margin-right: 12px;
+            font-size: 18px;
+        }
+
+        .signup-form {
+            background: white;
+            padding: 40px;
+            border-radius: 24px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .form-header h2 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+
+        .form-header p {
+            color: #64748b;
+            font-size: 16px;
+        }
+
+        .plan-selection {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .plan-card {
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .plan-card:hover,
+        .plan-card.selected {
+            border-color: #3b82f6;
+            background: #f8fafc;
+        }
+
+        .plan-card.selected::after {
+            content: "✓";
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: #3b82f6;
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .plan-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 4px;
+        }
+
+        .plan-price {
+            font-size: 24px;
+            font-weight: 700;
+            color: #3b82f6;
+            margin-bottom: 8px;
+        }
+
+        .plan-features {
+            font-size: 14px;
+            color: #64748b;
+            line-height: 1.4;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #374151;
+            font-size: 14px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.2s ease;
+            background: white;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="password"]:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .password-strength {
+            margin-top: 8px;
+            font-size: 12px;
+        }
+
+        .strength-bar {
+            height: 4px;
+            border-radius: 2px;
+            background: #e5e7eb;
+            margin-bottom: 4px;
+        }
+
+        .strength-fill {
+            height: 100%;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .strength-weak .strength-fill {
+            width: 33%;
+            background: #ef4444;
+        }
+
+        .strength-medium .strength-fill {
+            width: 66%;
+            background: #f59e0b;
+        }
+
+        .strength-strong .strength-fill {
+            width: 100%;
+            background: #10b981;
+        }
+
+        .signup-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-top: 16px;
+        }
+
+        .signup-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+        }
+
+        .signup-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .terms {
+            font-size: 12px;
+            color: #64748b;
+            text-align: center;
+            margin-top: 16px;
+            line-height: 1.4;
+        }
+
+        .terms a {
+            color: #3b82f6;
+            text-decoration: none;
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .login-link a {
+            color: #3b82f6;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .error-message {
+            background: #fef2f2;
+            color: #dc2626;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            font-size: 14px;
+        }
+
+        .success-message {
+            background: #f0fdf4;
+            color: #16a34a;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .hero-section {
+                text-align: center;
+            }
+
+            .hero-section h1 {
+                font-size: 36px;
+            }
+
+            .signup-form {
+                padding: 24px;
+            }
+
+            .plan-selection {
+                grid-template-columns: 1fr;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="hero-section">
+            <h1>🛡️ Protect Your Business from ADA Lawsuits</h1>
+            <p>Join thousands of businesses using AdaSure Pro to stay compliant and avoid costly legal issues.</p>
+
+            <ul class="benefits-list">
+                <li><strong>Legal Protection:</strong> Avoid $15K-$50K lawsuit settlements</li>
+                <li><strong>Market Expansion:</strong> Reach 25% more customers</li>
+                <li><strong>Real-Time Analytics:</strong> Track compliance and ROI</li>
+                <li><strong>Expert Support:</strong> Professional implementation help</li>
+                <li><strong>Instant Compliance:</strong> WCAG 2.1 AA certified</li>
+            </ul>
+
+            <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 12px; backdrop-filter: blur(10px);">
+                <p style="font-size: 14px; margin-bottom: 8px;">💰 <strong>Average Customer Savings:</strong></p>
+                <p style="font-size: 24px; font-weight: 700;">$25,000 in legal costs avoided</p>
+            </div>
+        </div>
+
+        <div class="signup-form">
+            <div class="form-header">
+                <h2>Start Your Free Trial</h2>
+                <p>14 days free, then starting at $50/month</p>
+            </div>
+
+            <div id="error-message" class="error-message" style="display: none;"></div>
+            <div id="success-message" class="success-message" style="display: none;"></div>
+
+            <form id="signup-form">
+                <div class="plan-selection">
+                    <div class="plan-card" data-plan="professional">
+                        <div class="plan-name">Professional</div>
+                        <div class="plan-price">$50<span style="font-size: 14px; color: #64748b;">/mo</span></div>
+                        <div class="plan-features">Complete toolkit + analytics</div>
+                    </div>
+                    <div class="plan-card selected" data-plan="enterprise">
+                        <div class="plan-name">Enterprise</div>
+                        <div class="plan-price">$499<span style="font-size: 14px; color: #64748b;">/year</span></div>
+                        <div class="plan-features">Save 17% + premium support</div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="firstName">First Name</label>
+                        <input type="text" id="firstName" name="firstName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Last Name</label>
+                        <input type="text" id="lastName" name="lastName" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Business Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="companyName">Company Name (Optional)</label>
+                    <input type="text" id="companyName" name="companyName">
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                    <div class="password-strength">
+                        <div class="strength-bar">
+                            <div class="strength-fill"></div>
+                        </div>
+                        <span class="strength-text">Choose a strong password</span>
+                    </div>
+                </div>
+
+                <div class="g-recaptcha" data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI" data-callback="onRecaptchaSuccess"></div>
+
+                <button type="submit" class="signup-btn" id="signup-btn" disabled>
+                    🚀 Start Free Trial - No Credit Card Required
+                </button>
+
+                <div class="terms">
+                    By signing up, you agree to our <a href="/terms" target="_blank">Terms of Service</a> and <a href="/privacy" target="_blank">Privacy Policy</a>.
+                    Free trial includes all features. Cancel anytime.
+                </div>
+            </form>
+
+            <div class="login-link">
+                Already have an account? <a href="/login">Sign in here</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // AdaSure Pro Signup Logic
+        let selectedPlan = 'enterprise';
+        let recaptchaToken = null;
+
+        // Plan selection
+        document.querySelectorAll('.plan-card').forEach(card => {
+            card.addEventListener('click', () => {
+                document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('selected'));
+                card.classList.add('selected');
+                selectedPlan = card.dataset.plan;
+            });
+        });
+
+        // Password strength checker
+        const passwordInput = document.getElementById('password');
+        const strengthBar = document.querySelector('.strength-bar');
+        const strengthText = document.querySelector('.strength-text');
+
+        passwordInput.addEventListener('input', (e) => {
+            const password = e.target.value;
+            const strength = calculatePasswordStrength(password);
+
+            strengthBar.className = `strength-bar strength-${strength.level}`;
+            strengthText.textContent = strength.message;
+        });
+
+        function calculatePasswordStrength(password) {
+            let score = 0;
+
+            if (password.length >= 8) score += 1;
+            if (/[A-Z]/.test(password)) score += 1;
+            if (/[0-9]/.test(password)) score += 1;
+            if (/[^A-Za-z0-9]/.test(password)) score += 1;
+
+            if (score < 2) return { level: 'weak', message: 'Weak - Add uppercase, numbers, or symbols' };
+            if (score < 4) return { level: 'medium', message: 'Good - Consider adding more variety' };
+            return { level: 'strong', message: 'Strong password!' };
+        }
+
+        // Recaptcha callback
+        window.onRecaptchaSuccess = function(token) {
+            recaptchaToken = token;
+            document.getElementById('signup-btn').disabled = false;
+        };
+
+        // Form submission
+        document.getElementById('signup-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            if (!recaptchaToken) {
+                showError('Please complete the reCAPTCHA verification');
+                return;
+            }
+
+            const formData = new FormData(e.target);
+            const signupBtn = document.getElementById('signup-btn');
+
+            signupBtn.disabled = true;
+            signupBtn.textContent = 'Creating Account...';
+
+            try {
+                // This would integrate with CloudflareAuth
+                const signupData = {
+                    email: formData.get('email'),
+                    password: formData.get('password'),
+                    firstName: formData.get('firstName'),
+                    lastName: formData.get('lastName'),
+                    companyName: formData.get('companyName'),
+                    planId: selectedPlan,
+                    recaptchaToken: recaptchaToken
+                };
+
+                // Simulate API call for demo
+                await new Promise(resolve => setTimeout(resolve, 2000));
+
+                showSuccess('Account created successfully! Check your email for next steps.');
+
+                // In production, redirect to payment or dashboard
+                setTimeout(() => {
+                    window.location.href = '/dashboard';
+                }, 3000);
+
+            } catch (error) {
+                showError('Signup failed. Please try again.');
+                console.error('Signup error:', error);
+            } finally {
+                signupBtn.disabled = false;
+                signupBtn.textContent = '🚀 Start Free Trial - No Credit Card Required';
+                grecaptcha.reset();
+                recaptchaToken = null;
+            }
+        });
+
+        function showError(message) {
+            const errorDiv = document.getElementById('error-message');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+            document.getElementById('success-message').style.display = 'none';
+        }
+
+        function showSuccess(message) {
+            const successDiv = document.getElementById('success-message');
+            successDiv.textContent = message;
+            successDiv.style.display = 'block';
+            document.getElementById('error-message').style.display = 'none';
+        }
+
+        // Analytics tracking
+        gtag('event', 'page_view', {
+            page_title: 'Signup Page',
+            page_location: window.location.href
+        });
+    </script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GA-MEASUREMENT-ID"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'GA-MEASUREMENT-ID');
+    </script>
+</body>
+</html>

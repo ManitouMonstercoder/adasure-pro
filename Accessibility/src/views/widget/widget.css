@@ -1,0 +1,75 @@
+.asw-widget,
+.asw-menu {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+}
+
+.asw-widget *,
+.asw-menu * {
+    box-sizing: border-box !important;
+}
+
+.asw-menu-btn {
+    position: fixed;
+    z-index: 500000;
+    right: 32px;
+    bottom: 32px;
+    box-shadow: 0 20px 25px -5px rgba(59, 130, 246, 0.1), 0 10px 10px -5px rgba(59, 130, 246, 0.04), 0 0 0 1px rgba(255, 255, 255, 0.05);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 20px;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    display: flex;
+    cursor: pointer;
+    border: none !important;
+    outline: none !important;
+    text-decoration: none !important;
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%) !important;
+    backdrop-filter: blur(20px);
+}
+
+.asw-menu-btn svg {
+    width: 32px;
+    height: 32px;
+    min-height: 32px;
+    min-width: 32px;
+    max-width: 32px;
+    max-height: 32px;
+    background: transparent !important;
+    fill: #ffffff !important;
+    transition: all 0.2s ease !important;
+}
+
+.asw-menu-btn:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 25px 50px -12px rgba(59, 130, 246, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+.asw-menu-btn:active {
+    transform: translateY(-1px) scale(0.98);
+}
+
+@media only screen and (max-width: 768px) {
+    .asw-menu-btn {
+        width: 56px;
+        height: 56px;
+        right: 24px;
+        bottom: 24px;
+        border-radius: 16px;
+    }
+
+    .asw-menu-btn svg {
+        width: 28px;
+        height: 28px;
+        min-height: 28px;
+        min-width: 28px;
+        max-width: 28px;
+        max-height: 28px;
+    }
+}

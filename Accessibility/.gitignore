@@ -1,0 +1,11 @@
+# Ignore node_modules directory
+node_modules/
+
+# Keep dist for GitHub Pages deployment
+# dist/
+
+# Ignore any temporary files
+*.log
+*.swp
+*.tmp
+*.tmp.*

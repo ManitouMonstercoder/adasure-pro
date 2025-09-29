@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - AdaSure Pro</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+        }
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            width: 280px;
+            background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+            border-right: 1px solid #e2e8f0;
+            padding: 32px 24px;
+            overflow-y: auto;
+        }
+
+        .logo-section {
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .logo-text {
+            font-size: 20px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-item {
+            margin-bottom: 8px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            color: #64748b;
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: #e2e8f0;
+            color: #1e293b;
+        }
+
+        .nav-icon {
+            margin-right: 12px;
+            font-size: 18px;
+        }
+
+        .main-content {
+            margin-left: 280px;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 24px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 32px;
+            border-radius: 16px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e2e8f0;
+        }
+
+        .stat-value {
+            font-size: 36px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            color: #64748b;
+            font-size: 14px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .stat-change {
+            margin-top: 8px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .stat-change.positive {
+            color: #16a34a;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 32px;
+        }
+
+        .dashboard-card {
+            background: white;
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e2e8f0;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .card-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2563eb;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: #64748b;
+            border: 1px solid #e2e8f0;
+        }
+
+        .api-key-section {
+            margin-bottom: 24px;
+        }
+
+        .api-key-display {
+            display: flex;
+            align-items: center;
+            background: #f8fafc;
+            padding: 16px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 16px;
+        }
+
+        .api-key-text {
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 14px;
+            flex: 1;
+            color: #374151;
+        }
+
+        .copy-btn {
+            background: #e2e8f0;
+            border: none;
+            padding: 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-left: 12px;
+        }
+
+        .usage-chart {
+            height: 200px;
+            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .feature-list {
+            list-style: none;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .feature-item:last-child {
+            border-bottom: none;
+        }
+
+        .feature-icon {
+            margin-right: 12px;
+            font-size: 18px;
+        }
+
+        .feature-info {
+            flex: 1;
+        }
+
+        .feature-name {
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .feature-desc {
+            font-size: 14px;
+            color: #64748b;
+        }
+
+        .feature-usage {
+            color: #16a34a;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        @media (max-width: 1024px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .header {
+                padding: 20px;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="logo-section">
+            <div class="logo">🛡️</div>
+            <div class="logo-text">AdaSure Pro</div>
+        </div>
+
+        <nav>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="#" class="nav-link active">
+                        <span class="nav-icon">📊</span>
+                        Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <span class="nav-icon">🔑</span>
+                        API Keys
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <span class="nav-icon">📈</span>
+                        Analytics
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <span class="nav-icon">📋</span>
+                        Compliance Reports
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <span class="nav-icon">⚙️</span>
+                        Settings
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <span class="nav-icon">💳</span>
+                        Billing
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <span class="nav-icon">❓</span>
+                        Support
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <header class="header">
+            <h1>Dashboard</h1>
+            <div class="user-menu">
+                <span style="color: #64748b; font-size: 14px;">Welcome, Demo User</span>
+                <div class="user-avatar">DU</div>
+            </div>
+        </header>
+
+        <div class="content">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value">98</div>
+                    <div class="stat-label">Compliance Score</div>
+                    <div class="stat-change positive">+2% from last week</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-value">1,247</div>
+                    <div class="stat-label">Monthly Sessions</div>
+                    <div class="stat-change positive">+15% from last month</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-value">$25,000</div>
+                    <div class="stat-label">Legal Costs Avoided</div>
+                    <div class="stat-change positive">Estimated savings</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-value">24/7</div>
+                    <div class="stat-label">Protection Active</div>
+                    <div class="stat-change positive">Always monitoring</div>
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3 class="card-title">Usage Analytics</h3>
+                        <a href="#" class="btn btn-outline">View Details</a>
+                    </div>
+                    <div class="usage-chart">
+                        📊 Analytics Chart Coming Soon
+                    </div>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3 class="card-title">Quick Actions</h3>
+                    </div>
+
+                    <div class="api-key-section">
+                        <h4 style="margin-bottom: 12px; font-size: 16px; font-weight: 600;">Your API Key</h4>
+                        <div class="api-key-display">
+                            <span class="api-key-text">adasure_demo_key_12345</span>
+                            <button class="copy-btn" onclick="copyApiKey()">📋</button>
+                        </div>
+                        <a href="#" class="btn btn-outline" style="font-size: 14px;">Generate New Key</a>
+                    </div>
+
+                    <div style="margin-top: 32px;">
+                        <h4 style="margin-bottom: 16px; font-size: 16px; font-weight: 600;">Popular Features</h4>
+                        <ul class="feature-list">
+                            <li class="feature-item">
+                                <span class="feature-icon">👁️</span>
+                                <div class="feature-info">
+                                    <div class="feature-name">Enhanced Visibility</div>
+                                    <div class="feature-desc">Big cursor and visual aids</div>
+                                </div>
+                                <div class="feature-usage">89% usage</div>
+                            </li>
+                            <li class="feature-item">
+                                <span class="feature-icon">🎨</span>
+                                <div class="feature-info">
+                                    <div class="feature-name">Visual Comfort</div>
+                                    <div class="feature-desc">Contrast adjustments</div>
+                                </div>
+                                <div class="feature-usage">76% usage</div>
+                            </li>
+                            <li class="feature-item">
+                                <span class="feature-icon">📖</span>
+                                <div class="feature-info">
+                                    <div class="feature-name">Focus Assistant</div>
+                                    <div class="feature-desc">Reading guide tools</div>
+                                </div>
+                                <div class="feature-usage">64% usage</div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top: 40px;">
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3 class="card-title">Recent Activity</h3>
+                    </div>
+                    <div style="color: #64748b; text-align: center; padding: 40px;">
+                        📈 Activity feed will display here
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Check authentication
+        const sessionToken = localStorage.getItem('adasure_session_token');
+        if (!sessionToken) {
+            window.location.href = '/login.html';
+        }
+
+        function copyApiKey() {
+            const apiKey = 'adasure_demo_key_12345';
+            navigator.clipboard.writeText(apiKey).then(() => {
+                const btn = document.querySelector('.copy-btn');
+                const original = btn.textContent;
+                btn.textContent = '✅';
+                setTimeout(() => {
+                    btn.textContent = original;
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy:', err);
+            });
+        }
+
+        // Simulate real-time updates
+        function updateStats() {
+            const scoreElement = document.querySelector('.stat-value');
+            const currentScore = parseInt(scoreElement.textContent);
+
+            // Randomly fluctuate compliance score
+            if (Math.random() > 0.7) {
+                const newScore = Math.min(100, currentScore + Math.floor(Math.random() * 3) - 1);
+                scoreElement.textContent = newScore;
+            }
+        }
+
+        // Update stats every 30 seconds
+        setInterval(updateStats, 30000);
+
+        // Navigation handling
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+
+                // Remove active class from all links
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+
+                // Add active class to clicked link
+                link.classList.add('active');
+
+                // Update header title
+                const title = link.textContent.trim();
+                document.querySelector('.header h1').textContent = title;
+            });
+        });
+
+        // Analytics tracking
+        gtag('event', 'page_view', {
+            page_title: 'Dashboard',
+            page_location: window.location.href
+        });
+
+        // Track user engagement
+        gtag('event', 'dashboard_load', {
+            user_type: 'authenticated',
+            plan: 'enterprise'
+        });
+    </script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GA-MEASUREMENT-ID"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'GA-MEASUREMENT-ID');
+    </script>
+</body>
+</html>

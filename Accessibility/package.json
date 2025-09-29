@@ -1,0 +1,23 @@
+{
+  "name": "@adasure/accessibility-pro",
+  "version": "3.0.0",
+  "description": "AdaSure Pro: Premium ADA Compliance Widget for Business Websites",
+  "main": "./src/entry.ts",
+  "scripts": {
+    "watch": "node esbuild.config.js --watch",
+    "build": "node esbuild.config.js --minify",
+    "build:prod": "NODE_ENV=production node esbuild.config.js --minify"
+  },
+  "repository": {
+    "type": "git",
+    "url": "private"
+  },
+  "author": "AdaSure Technologies",
+  "license": "COMMERCIAL",
+  "keywords": ["accessibility", "ada", "compliance", "business", "enterprise", "wcag"],
+  "homepage": "https://adasure.pro/",
+  "devDependencies": {
+    "esbuild": "0.25.1",
+    "html-minifier": "^4.0.0"
+  }
+}

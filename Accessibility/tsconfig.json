@@ -1,0 +1,22 @@
+{
+    "compilerOptions": {
+      "outDir": "./dist/",
+      "module": "es6",
+      "target": "es5",
+      "lib": ["es2015", "dom"],
+      "allowJs": true,
+      "moduleResolution": "node",
+      "resolveJsonModule": true,
+      "allowSyntheticDefaultImports": true,
+      "types": [
+        "./svg.d.ts",
+        "./css.d.ts"
+      ],
+      "paths": {
+        "@/*": ["./src/*"]
+      }
+    },
+    "include": [
+      "./src/**/*.ts"
+    ]
+}
